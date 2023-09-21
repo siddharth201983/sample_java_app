@@ -6,11 +6,9 @@ pipeline {
     stages {
         stage("Git Checkout"){
             steps{
-                script{
-                    gitCheckout{
-                        branch: "main",
-                        url: 'https://github.com/siddharth201983/sample_java_app.git'
-                    }
+                gitCheckout{
+                    branch: "main",
+                    url: 'https://github.com/siddharth201983/sample_java_app.git'
                 }
             }
         }
