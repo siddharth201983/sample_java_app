@@ -8,7 +8,7 @@ pipeline {
             steps{
                 script{
                     gitCheckout{
-                        branch: "main"
+                        branch: "main",
                         url: 'https://github.com/siddharth201983/sample_java_app.git'
                     }
                 }
