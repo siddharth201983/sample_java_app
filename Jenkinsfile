@@ -5,7 +5,10 @@ pipeline {
         stage("Git Checkout"){
             steps{
                 script{
-                    git branch: 'main', credentialsId: 'gitcred', url: 'https://github.com/siddharth201983/sample_java_app.git'
+                    gitCheckout{
+                        branch: "main"
+                        url: 'https://github.com/siddharth201983/sample_java_app.git'
+                    }
                 }
             }
         }
