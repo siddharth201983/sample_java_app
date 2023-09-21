@@ -3,46 +3,35 @@
 pipeline {
     agent any
 
-    // parameters {
-    //     // choice(name: 'action', choices: 'create\ndelete', description: 'Choose create/Destroy')
-
-    // }
-
     stages {
+        stage("Clean Workspace"){
+            steps{
+                cleanWs()
+            }
+        }
         stage("Git Checkout"){
             // when { expression {  params.action == 'create' } }
             steps{
-                script{
-                    gitCheckout(
-                        branch: "main",
-                        url: 'https://github.com/siddharth201983/sample_java_app.git'
-                    )
-                }
+                git branch: 'main', credentialsId: 'gitcred', url: 'https://github.com/siddharth201983/sample_java_app.git'
             }
         }
-        stage("Unit Test Maven"){
-            // when { expression {  params.action == 'create' } }
+        stage("Build Application"){
             steps{
-                script{
-                    mvnTest()
-                }
+                sh 'mvn clean package'
             }
         }
-        stage("Integration Test maven"){
-            // when { expression {  params.action == 'create' } }
+        stage("Test Application"){
             steps{
-                script{
-                    mvnIntegrationTest()
-                }
+                sh 'mvn test'
             }
         }
-        stage("Static Code Analysis"){
-            // when { expression {  params.action == 'create' } }
+        stage("SonarQube Analysis"){
             steps{
                 script{
-                    def SonarQubecredentialsId = 'sonarqube-api'
-                    statiCodeAnalysis(SonarQubecredentialsId)
+                    withSonarQubeEnv(credentialsId: 'sonaqube-api') {
+                        sh 'mvn sonar:sonar'
                 }
+              }
             }
         }
     }
